@@ -48,7 +48,7 @@ entry. Nothing less. See `duplicate-drug-licence.md` for the verification note.
 
 ## 2. It is already online
 
-**Live now:** https://yshu4743.github.io/leo-hospital-site/
+**Live now:** https://yshu4743.github.io/rohan-thomas-hospital/
 
 Hosted on GitHub Pages, free, no expiry, no vendor. Every push to `main`
 redeploys in about a minute.
