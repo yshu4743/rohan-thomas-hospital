@@ -23,6 +23,29 @@ That one block updates the header, call buttons, WhatsApp links, footer, and add
 
 **`govtAided` stays `false` until you physically hold the certificate.** Flipping it is one word, and it is the only difference between "a hospital" and "a false claim". Get the paper first.
 
+### Adding a doctor
+
+Add an entry to the `doctors` array with the **real** council registration number:
+
+```js
+doctors: [
+  { name: "Dr. Rohan Thomas", role: "Medical Oncologist",
+    qual: "MBBS, MD, DM (Medical Oncology)", regNo: "KMC 12345" }
+]
+```
+
+The whole section stays hidden while the array is empty. Any entry without a
+`regNo` is skipped and never appears on the page — check the browser console for
+the warning. Verify the number first, free of charge:
+
+- Kerala Medical Council — kmcouncil.org
+- Tamil Nadu Medical Council — tnmc.org
+- National Medical Commission — Indian Medical Register
+
+"Oncologist" requires MD plus DM/DNB Medical Oncology, visible in the register
+entry. Nothing less. See `duplicate-drug-licence.md` for the verification note.
+
+
 ## 2. It is already online
 
 **Live now:** https://yshu4743.github.io/leo-hospital-site/

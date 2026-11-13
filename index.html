@@ -101,6 +101,21 @@
     background:#e6f6f2; color:var(--brand-dark); font-size:1.15rem; margin-bottom:.85rem;
   }
 
+  /* ---------- doctors ---------- */
+  .doc{display:flex; gap:.9rem; align-items:flex-start}
+  .avatar{
+    width:52px; height:52px; border-radius:50%; flex:0 0 auto; display:grid; place-items:center;
+    background:#e6f6f2; color:var(--brand-dark); font-weight:800; font-size:1.05rem; letter-spacing:.02em;
+  }
+  .doc h3{margin:0 0 .15rem}
+  .doc .role{color:var(--brand-dark); font-weight:700; font-size:.85rem; margin:0 0 .3rem}
+  .doc .qual{color:var(--muted); font-size:.9rem; margin:0 0 .45rem}
+  .reg{
+    display:inline-block; font-size:.76rem; font-weight:700; letter-spacing:.03em;
+    background:#f1f5f9; border:1px solid var(--line); color:var(--muted);
+    padding:.22rem .55rem; border-radius:6px;
+  }
+
   /* ---------- refill form ---------- */
   .refill{background:#fff; border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
   .refillbox{
@@ -218,6 +233,16 @@
   </div>
 </section>
 
+<section id="doctors" hidden>
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Our doctors</h2>
+      <p>Every consultant's council registration number is shown, so you can check it yourself in the Medical Council register.</p>
+    </div>
+    <div class="grid" id="doctorGrid"></div>
+  </div>
+</section>
+
 <section class="refill" id="refill">
   <div class="wrap">
     <div class="refillbox">
@@ -299,7 +324,15 @@ const SITE = {
   // Leave this FALSE. Only switch to true after you actually hold the
   // government-aided / empanelment certificate in your hand.
   govtAided: false,
-  govtLabel: "Government Aided"
+  govtLabel: "Government Aided",
+
+  // Doctors are only shown when BOTH a name and a real council registration
+  // number are supplied. An entry missing regNo is silently skipped and nothing
+  // is published. Never guess or reuse a number.
+  // Example:
+  // { name: "Dr. Rohan Thomas", role: "Medical Oncologist",
+  //   qual: "MBBS, MD, DM (Medical Oncology)", regNo: "KMC 12345" }
+  doctors: []
 };
 /* ------------------------------------------------------------------ */
 
@@ -363,6 +396,56 @@ form.addEventListener("submit", (e) => {
   hint.textContent = "Opening WhatsApp…";
   window.open(url, "_blank", "noopener");
 });
+
+// ---- doctors: render only entries that carry a real registration number ----
+const doctorSection = document.getElementById("doctors");
+const doctorGrid = document.getElementById("doctorGrid");
+const initials = (n) => n.replace(/^(Dr\.?|Dr)\s+/i, "").split(/\s+/)
+  .slice(0, 2).map(w => w.charAt(0).toUpperCase()).join("");
+
+const validDoctors = (SITE.doctors || []).filter(d => {
+  const ok = d && d.name && d.regNo && String(d.regNo).trim().length >= 4;
+  if (!ok) console.warn("Skipped a doctor entry with no registration number:", d);
+  return ok;
+});
+
+if (validDoctors.length) {
+  validDoctors.forEach(d => {
+    const card = document.createElement("div");
+    card.className = "card doc";
+    const body = document.createElement("div");
+
+    const av = document.createElement("div");
+    av.className = "avatar";
+    av.setAttribute("aria-hidden", "true");
+    av.textContent = initials(d.name);
+
+    const h3 = document.createElement("h3");
+    h3.textContent = d.name;
+
+    body.appendChild(h3);
+    if (d.role) {
+      const role = document.createElement("p");
+      role.className = "role";
+      role.textContent = d.role;
+      body.appendChild(role);
+    }
+    if (d.qual) {
+      const q = document.createElement("p");
+      q.className = "qual";
+      q.textContent = d.qual;
+      body.appendChild(q);
+    }
+    const reg = document.createElement("span");
+    reg.className = "reg";
+    reg.textContent = "Reg. No. " + d.regNo;
+    body.appendChild(reg);
+
+    card.append(av, body);
+    doctorGrid.appendChild(card);
+  });
+  doctorSection.hidden = false;
+}
 
 // SEO: local business structured data
 const ld = {
