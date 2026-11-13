@@ -23,15 +23,23 @@ That one block updates the header, call buttons, WhatsApp links, footer, and add
 
 **`govtAided` stays `false` until you physically hold the certificate.** Flipping it is one word, and it is the only difference between "a hospital" and "a false claim". Get the paper first.
 
-## 2. Get it online (free, 5 minutes)
+## 2. It is already online
 
-Pick one:
+**Live now:** https://yshu4743.github.io/leo-hospital-site/
 
-| Option | How |
-|---|---|
-| **Netlify Drop** | netlify.com/drop → drag this folder in → live URL instantly |
-| **Cloudflare Pages** | pages.cloudflare.com → direct upload |
-| **GitHub Pages** | new repo → upload `index.html` → Settings → Pages |
+Hosted on GitHub Pages, free, no expiry, no vendor. Every push to `main`
+redeploys in about a minute.
+
+To change something:
+
+```bash
+cd ~/projects/leo-hospital-site
+# edit index.html, then:
+git add -A && git commit -m "update details" && git push
+```
+
+To use your own domain later: repo → Settings → Pages → Custom domain.
+
 
 Then buy the domain when you're ready and point it at the host.
 
