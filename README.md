@@ -1,4 +1,4 @@
-# Hospital + Pharmacy page
+# Rohan Thomas Hospital — website
 
 One file, no build step, no dependencies. Open `index.html` in a browser and it works.
 
@@ -8,7 +8,7 @@ Open `index.html`, scroll to the bottom, and edit the `SITE` block:
 
 ```js
 const SITE = {
-  name:      "Leo Hospital",
+  name:      "Rohan Thomas Hospital",
   tagline:   "Hospital & Pharmacy",
   phone:     "917994804743",
   phoneText: "+91 79948 04743",
