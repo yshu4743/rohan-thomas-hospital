@@ -195,6 +195,7 @@
       <a class="btn ghost" data-wa href="https://wa.me/917994804743">Order on WhatsApp</a>
     </div>
     <ul class="facts">
+      <li>Karukutty, Angamaly</li>
       <li>Open 8:00 am &ndash; 9:00 pm, all days</li>
       <li>Home delivery within 5 km</li>
       <li>Monthly refills for regular medicines</li>
@@ -318,8 +319,8 @@ const SITE = {
   tagline:   "Hospital & Pharmacy",
   phone:     "917994804743",          // country code + number, digits only
   phoneText: "+91 79948 04743",       // how the number is shown to people
-  address:   "Kerala, India",           // e.g. "Main Road, Angamaly, Kerala 683572"
-  mapsQuery: "",                      // e.g. "Leo Hospital, Angamaly, Kerala"
+  address:   "Karukutty, Angamaly, Kerala",   // add your street and PIN when you have it
+  mapsQuery: "Karukutty, Angamaly, Kerala",  // e.g. "Karukutty, Angamaly, Kerala 683576"
 
   // Leave this FALSE. Only switch to true after you actually hold the
   // government-aided / empanelment certificate in your hand.
@@ -453,7 +454,13 @@ const ld = {
   "@type": ["MedicalBusiness", "Pharmacy"],
   "name": SITE.name,
   "telephone": "+" + SITE.phone,
-  "address": SITE.address,
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": SITE.address,
+    "addressLocality": "Angamaly",
+    "addressRegion": "Kerala",
+    "addressCountry": "IN"
+  },
   "openingHours": "Mo-Su 08:00-21:00",
   "url": location.href
 };
