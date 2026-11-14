@@ -199,7 +199,7 @@
       <a class="btn primary" data-tel-med href="tel:+918714804743">
         Medicines&nbsp;&middot;&nbsp;<span data-num="med">+91 87148 04743</span>
       </a>
-      <a class="btn ghost" data-wa href="https://wa.me/918714804743">WhatsApp prescription</a>
+      <a class="btn ghost" data-wa href="https://wa.me/917994804743">WhatsApp prescription</a>
     </div>
     <p class="altline">
       Hospital &amp; general enquiries:
@@ -262,7 +262,7 @@
       <div>
         <h2>Send your prescription</h2>
         <p style="color:var(--muted); margin-top:0">
-          Fill this in and it opens WhatsApp on our medicine line <strong data-num="med">+91 87148 04743</strong> with the
+          Fill this in and it opens WhatsApp on <strong data-num="wa">+91 79948 04743</strong> with the
           message already written. Attach a photo of the prescription there and we will
           confirm the price and the delivery time.
         </p>
@@ -299,8 +299,8 @@
       <div>
         <h4>Medicines</h4>
         <p><a data-tel-med href="tel:+918714804743"><span data-num="med">+91 87148 04743</span></a></p>
-        <p><a data-wa href="https://wa.me/918714804743">WhatsApp prescription</a></p>
-        <p style="margin-top:.8rem"><strong>Hospital</strong><br><a data-tel href="tel:+917994804743"><span data-num="main">+91 79948 04743</span></a></p>
+        <p style="margin-top:.8rem"><strong>Hospital &amp; WhatsApp</strong><br><a data-tel href="tel:+917994804743"><span data-num="main">+91 79948 04743</span></a></p>
+        <p><a data-wa href="https://wa.me/917994804743">Send prescription on WhatsApp</a></p>
       </div>
       <div>
         <h4>Hours</h4>
@@ -321,7 +321,7 @@
 
 <nav class="mobilebar" aria-label="Quick contact">
   <a class="m-call" data-tel-med href="tel:+918714804743">Call medicines</a>
-  <a class="m-wa" data-wa href="https://wa.me/918714804743">WhatsApp</a>
+  <a class="m-wa" data-wa href="https://wa.me/917994804743">WhatsApp</a>
 </nav>
 
 <script>
@@ -334,8 +334,11 @@ const SITE = {
   phone:     "917994804743",          // hospital / general enquiries
   phoneText: "+91 79948 04743",
 
-  medPhone:     "918714804743",       // medicine orders, pharmacy, WhatsApp
+  medPhone:     "918714804743",       // medicine orders & pharmacy (calls)
   medPhoneText: "+91 87148 04743",
+
+  waPhone:     "917994804743",        // the number that actually has WhatsApp
+  waPhoneText: "+91 79948 04743",
   address:   "Karukutty, Angamaly, Kerala",   // add your street and PIN when you have it
   mapsQuery: "Karukutty, Angamaly, Kerala",  // e.g. "Karukutty, Angamaly, Kerala 683576"
 
@@ -364,8 +367,9 @@ document.querySelectorAll("[data-tel-med]").forEach(a => a.href = "tel:+" + SITE
 document.querySelectorAll("[data-num='main']").forEach(el => el.textContent = SITE.phoneText);
 document.querySelectorAll("[data-num='med']").forEach(el => el.textContent = SITE.medPhoneText);
 
-const waBase = "https://wa.me/" + SITE.medPhone;
+const waBase = "https://wa.me/" + SITE.waPhone;
 document.querySelectorAll("[data-wa]").forEach(a => a.href = waBase);
+document.querySelectorAll("[data-num='wa']").forEach(el => el.textContent = SITE.waPhoneText);
 
 // Government-aided badge only shows when SITE.govtAided is true
 const govBadge = document.getElementById("govBadge");

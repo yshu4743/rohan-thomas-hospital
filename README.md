@@ -14,6 +14,8 @@ const SITE = {
   phoneText: "+91 79948 04743",
   medPhone:     "918714804743",       // medicine orders, pharmacy, WhatsApp
   medPhoneText: "+91 87148 04743",
+  waPhone:     "917994804743",
+  waPhoneText: "+91 79948 04743",
   address:   "Karukutty, Angamaly, Kerala",
   mapsQuery: "Karukutty, Angamaly, Kerala",
   govtAided: false,
