@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prescription pad — Rohan Thomas Hospital</title>
+<style>
+  :root{ --ink:#111827; --muted:#5b6472; --line:#cbd5e1; --brand:#0f766e; }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:#eef2f1; color:var(--ink);
+    font:14px/1.45 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+  }
+  .toolbar{
+    max-width:148mm; margin:18px auto 12px; display:flex; gap:10px; align-items:center;
+    justify-content:space-between; flex-wrap:wrap;
+  }
+  .toolbar p{margin:0; font-size:13px; color:#36504c; max-width:52ch}
+  .btn{
+    font:inherit; font-weight:700; cursor:pointer; border:0; border-radius:9px;
+    background:var(--brand); color:#fff; padding:.6rem 1rem;
+  }
+  .btn:hover{background:#0b5b55}
+
+  .warn{
+    max-width:148mm; margin:0 auto 12px; padding:.75rem 1rem; border-radius:10px;
+    background:#fef2f2; border:1px solid #fca5a5; color:#7f1d1d; font-size:13px; font-weight:600;
+    display:none;
+  }
+  .warn.show{display:block}
+
+  /* ---------- the pad ---------- */
+  .pad{
+    width:148mm; min-height:210mm; margin:0 auto 24px; background:#fff;
+    padding:9mm 10mm 7mm; position:relative; box-shadow:0 2px 14px rgba(15,23,42,.13);
+    display:flex; flex-direction:column;
+  }
+  .head{
+    display:flex; justify-content:space-between; gap:8mm;
+    border-bottom:2px solid var(--brand); padding-bottom:3mm;
+  }
+  .hosp{font-size:17px; font-weight:800; letter-spacing:-.2px; line-height:1.15; color:var(--brand)}
+  .hosp small{display:block; font-size:10.5px; font-weight:600; color:var(--muted); letter-spacing:.06em; text-transform:uppercase; margin-top:1.5mm}
+  .hosp .addr{font-size:10.5px; color:var(--muted); font-weight:400; margin-top:1.5mm; letter-spacing:0; text-transform:none}
+  .doc{text-align:right; font-size:10.5px; color:var(--muted); line-height:1.5; min-width:52mm}
+  .doc .name{font-size:12.5px; font-weight:700; color:var(--ink)}
+  .doc .reg{font-weight:700; color:var(--brand)}
+
+  .fields{display:grid; grid-template-columns:1fr 1fr; gap:2mm 8mm; margin:4mm 0 1mm; font-size:11.5px}
+  .f{display:flex; gap:2mm; align-items:baseline; border-bottom:1px dotted var(--line); padding-bottom:1.2mm}
+  .f span{color:var(--muted); white-space:nowrap}
+  .f b{flex:1; min-height:4.5mm}
+
+  .vitals{display:flex; gap:6mm; font-size:10.5px; color:var(--muted); margin:2mm 0 3mm}
+  .vitals span{display:flex; gap:1.5mm; align-items:baseline}
+  .vitals b{display:inline-block; min-width:13mm; border-bottom:1px dotted var(--line); height:3.5mm}
+
+  .rx{font-size:26px; font-weight:800; color:var(--brand); line-height:1; margin:1mm 0 2mm; font-family:Georgia,serif}
+  .lines{flex:1; display:flex; flex-direction:column; gap:6.5mm; padding-top:1mm}
+  .lines div{border-bottom:1px dotted var(--line); height:5mm}
+
+  .advice{margin-top:3mm; font-size:11px; color:var(--muted)}
+  .advice b{color:var(--ink)}
+  .sign{margin-top:auto; display:flex; justify-content:flex-end; padding-top:6mm}
+  .sigbox{text-align:center; min-width:56mm}
+  .sigline{border-top:1px solid #94a3b8; margin-bottom:1.5mm}
+  .sigbox .n{font-size:11.5px; font-weight:700}
+  .sigbox .q,.sigbox .r{font-size:9.5px; color:var(--muted); line-height:1.35}
+
+  .foot{
+    margin-top:4mm; padding-top:2mm; border-top:1px solid #e2e8f0;
+    font-size:8.5px; color:#94a3b8; display:flex; justify-content:space-between; gap:6mm;
+  }
+
+  @media print{
+    body{background:#fff}
+    .toolbar,.warn{display:none !important}
+    .pad{margin:0; box-shadow:none; width:auto; min-height:auto; padding:6mm 7mm}
+    @page{ size:A5; margin:6mm }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <p><strong>Blank prescription pad.</strong> Print on A5 or A4 and cut. Only a registered practitioner may sign and issue a prescription.</p>
+  <button class="btn" onclick="window.print()">Print</button>
+</div>
+
+<div class="warn" id="warn"></div>
+
+<div class="pad">
+  <div class="head">
+    <div class="hosp">
+      <span id="hospName">Rohan Thomas Hospital</span>
+      <small id="hospTag">Hospital &amp; Pharmacy</small>
+      <div class="addr" id="hospAddr">Karukutty, Angamaly, Kerala</div>
+      <div class="addr" id="hospPhone">+91 79948 04743</div>
+    </div>
+    <div class="doc">
+      <div class="name" id="docName">Dr. ————————</div>
+      <div id="docQual">———————————————</div>
+      <div class="reg" id="docReg">Reg. No. ————————</div>
+      <div id="docHours">8:00 am – 9:00 pm, all days</div>
+    </div>
+  </div>
+
+  <div class="fields">
+    <div class="f"><span>Name</span><b></b></div>
+    <div class="f"><span>Date</span><b></b></div>
+    <div class="f"><span>Age / Sex</span><b></b></div>
+    <div class="f"><span>OP No.</span><b></b></div>
+  </div>
+
+  <div class="vitals">
+    <span>BP <b></b></span>
+    <span>Pulse <b></b></span>
+    <span>Temp <b></b></span>
+    <span>Weight <b></b></span>
+    <span>SpO&#8322; <b></b></span>
+  </div>
+
+  <div class="rx">&#8478;</div>
+  <div class="lines">
+    <div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div>
+  </div>
+
+  <div class="advice">
+    <b>Advice:</b> ______________________________________________________________________
+  </div>
+
+  <div class="sign">
+    <div class="sigbox">
+      <div class="sigline"></div>
+      <div class="n" id="sigName">Dr. ————————</div>
+      <div class="q" id="sigQual">———————————————</div>
+      <div class="r" id="sigReg">Reg. No. ————————</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>Not valid without the doctor's signature and registration number.</span>
+    <span id="footPhone">+91 79948 04743</span>
+  </div>
+</div>
+
+<script>
+/* -----------------------------------------------------------------
+   FILL THESE IN. The pad will refuse to print cleanly until regNo is set.
+   ----------------------------------------------------------------- */
+const PAD = {
+  hospital:      "Rohan Thomas Hospital",
+  tagline:       "Hospital & Pharmacy",
+  address:       "Karukutty, Angamaly, Kerala",
+  phone:         "+91 79948 04743",
+
+  doctor:        "",            // e.g. "Dr. Rohan Thomas"
+  qualification: "",            // e.g. "MBBS, MD (General Medicine)"
+  regNo:         "",            // real council number, e.g. "KMC 12345"
+  hours:         "8:00 am – 9:00 pm, all days"
+};
+/* ----------------------------------------------------------------- */
+
+const set = (id, v) => { const el = document.getElementById(id); if (el && v) el.textContent = v; };
+
+set("hospName", PAD.hospital);
+set("hospTag", PAD.tagline);
+set("hospAddr", PAD.address);
+set("hospPhone", PAD.phone);
+set("footPhone", PAD.phone);
+set("docHours", PAD.hours);
+
+if (PAD.doctor)        { set("docName", PAD.doctor); set("sigName", PAD.doctor); set("docName", PAD.doctor); }
+if (PAD.qualification) { set("docQual", PAD.qualification); set("sigQual", PAD.qualification); }
+if (PAD.regNo)         { set("docReg", "Reg. No. " + PAD.regNo); set("sigReg", "Reg. No. " + PAD.regNo); }
+
+const warn = document.getElementById("warn");
+if (!PAD.regNo || !PAD.doctor) {
+  warn.classList.add("show");
+  warn.textContent =
+    "DRAFT — doctor name and real council registration number are missing. " +
+    "Do not print or use this until they are filled in from the Medical Council register.";
+  document.title = "DRAFT — prescription pad";
+}
+</script>
+</body>
+</html>
