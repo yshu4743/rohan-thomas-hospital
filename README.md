@@ -13,7 +13,7 @@ const SITE = {
   phone:     "917994804743",
   phoneText: "+91 79948 04743",
   address:   "Your street, town, PIN",
-  mapsQuery: "Leo Hospital, Angamaly, Kerala",
+  mapsQuery: "Karukutty, Angamaly, Kerala",
   govtAided: false,
   govtLabel: "Government Aided"
 };
@@ -100,7 +100,24 @@ You need the paperwork, in roughly this order, for a Kerala establishment:
 
 Once item 7 is in your hand, set `govtAided: true` and you are compliant.
 
-## 5. Safety / legal note
+## 5. WhatsApp front desk bot
+
+`bot/` contains a Node + TypeScript bot on the Meta WhatsApp Cloud API. It books
+appointment requests, takes medicine enquiries, records document requests, and
+hands the chat to a staff member when it gets complicated (complaint, emergency
+language, low confidence, repeated confusion, explicit "talk to a person").
+
+It **records** document requests and routes them to the authorised signatory. It
+does not generate, print or reprint certificates or drug licences — a look-alike
+would be a forged document. See `bot/README.md` for setup, the staff admin API,
+and the escalation rules.
+
+```bash
+cd bot && cp .env.example .env && npm install
+BOT_DRY_RUN=true npm run dev   # test without Meta credentials
+```
+
+## 6. Safety / legal note
 
 Editing another company's website through its internal APIs is unauthorised
 access under the IT Act (s.43/66), even if you own the domain name. If
