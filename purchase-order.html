@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Purchase order — Rohan Thomas Hospital</title>
+<style>
+  :root{ --ink:#0f172a; --muted:#5b6472; --line:#cbd5e1; --brand:#0f766e; }
+  *{box-sizing:border-box}
+  body{margin:0; background:#eef2f1; color:var(--ink); font:13px/1.45 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+
+  .bar{max-width:210mm; margin:16px auto 10px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+  .bar .g{display:flex; gap:8px; flex-wrap:wrap}
+  .btn{font:inherit; font-weight:700; cursor:pointer; border:1.5px solid var(--line); background:#fff; color:var(--ink); padding:.5rem .9rem; border-radius:8px}
+  .btn.primary{background:var(--brand); border-color:var(--brand); color:#fff}
+  .btn:hover{border-color:var(--brand)}
+  .btn.primary:hover{background:#0b5b55}
+  .hint{max-width:210mm; margin:0 auto 8px; font-size:12px; color:#36504c}
+
+  .sheet{width:210mm; min-height:297mm; margin:0 auto 24px; background:#fff; padding:14mm 14mm 10mm; box-shadow:0 2px 14px rgba(15,23,42,.13)}
+
+  .top{display:flex; justify-content:space-between; gap:8mm; border-bottom:2px solid var(--brand); padding-bottom:4mm}
+  .hosp{font-size:19px; font-weight:800; color:var(--brand); line-height:1.15; letter-spacing:-.2px}
+  .hosp .meta{font-size:11px; font-weight:400; color:var(--muted); margin-top:1.5mm}
+  .po{text-align:right; font-size:11px; color:var(--muted)}
+  .po h2{margin:0 0 1.5mm; font-size:15px; letter-spacing:.12em; color:var(--ink)}
+  .po .no{font-size:13px; font-weight:800; color:var(--ink)}
+
+  .parties{display:grid; grid-template-columns:1fr 1fr; gap:6mm; margin:5mm 0}
+  .box{border:1px solid var(--line); border-radius:8px; padding:3mm 3.5mm}
+  .box h3{margin:0 0 2mm; font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+  .box .line{min-height:5mm; border-bottom:1px dotted var(--line); margin-bottom:1.5mm; font-size:11.5px}
+  .box .line:last-child{border-bottom:0; margin-bottom:0}
+
+  table{width:100%; border-collapse:collapse; margin-top:2mm}
+  th,td{border:1px solid var(--line); padding:1.6mm 2mm; font-size:11.5px}
+  th{background:#f1f5f4; text-align:left; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:#36504c}
+  td.num,th.num{text-align:right; width:22mm}
+  td.qty{width:18mm}
+  td.pack{width:26mm}
+  tbody tr:nth-child(even){background:#fbfcfc}
+
+  .totals{display:flex; justify-content:flex-end; margin-top:3mm}
+  .totals table{width:70mm; border-collapse:collapse}
+  .totals td{border:0; padding:1mm 2mm; font-size:11.5px}
+  .totals td:last-child{text-align:right; font-weight:700}
+  .totals tr.grand td{border-top:1.5px solid var(--ink); font-size:13px; padding-top:2mm}
+
+  .notes{margin-top:5mm; font-size:10.5px; color:var(--muted)}
+  .notes b{color:var(--ink)}
+  .notes ul{margin:1.5mm 0 0; padding-left:4.5mm}
+  .notes li{margin-bottom:.8mm}
+
+  .sign{display:flex; justify-content:space-between; gap:10mm; margin-top:12mm}
+  .sign div{flex:1; border-top:1px solid #94a3b8; padding-top:1.5mm; font-size:10px; color:var(--muted); text-align:center}
+
+  input.cell, textarea.cell{width:100%; border:0; font:inherit; font-size:11.5px; padding:0; background:transparent; color:var(--ink)}
+  input.cell:focus, textarea.cell:focus{outline:1.5px solid var(--brand); outline-offset:1px; border-radius:2px}
+  input.lineInput{border:0; border-bottom:1px dotted var(--line); font:inherit; font-size:11.5px; width:100%; padding:0 0 .5mm; background:transparent; margin-bottom:1.5mm}
+  input.lineInput:focus{outline:none; border-bottom-color:var(--brand)}
+
+  @media print{
+    body{background:#fff}
+    .bar,.hint{display:none !important}
+    .sheet{width:auto; min-height:auto; margin:0; padding:0; box-shadow:none}
+    @page{ size:A4; margin:12mm }
+    input.cell{background:transparent}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="g">
+    <button class="btn primary" onclick="window.print()">Print / Save PDF</button>
+    <button class="btn" id="addRow">+ Add row</button>
+    <button class="btn" id="saveDraft">Save draft</button>
+    <button class="btn" id="clearDraft">Clear</button>
+  </div>
+  <span class="hint" id="status"></span>
+</div>
+<p class="hint">
+  Editable purchase order. Fill it, print it, send it to the dealer. Nothing is uploaded anywhere — it stays in this browser.
+</p>
+
+<div class="sheet">
+  <div class="top">
+    <div class="hosp">
+      Rohan Thomas Hospital
+      <div class="meta">
+        Karukutty, Angamaly, Kerala<br>
+        Phone: +91 79948 04743 &middot; Medicines: +91 87148 04743<br>
+        Drug Licence No.: ____________________ (Form 20 / 21)
+      </div>
+    </div>
+    <div class="po">
+      <h2>PURCHASE ORDER</h2>
+      <div class="no" id="poNo">PO-000000-000</div>
+      <div>Date: <span id="poDate"></span></div>
+    </div>
+  </div>
+
+  <div class="parties">
+    <div class="box">
+      <h3>Supplier / wholesaler</h3>
+      <input class="lineInput" placeholder="Firm name" data-k="supName">
+      <input class="lineInput" placeholder="Address" data-k="supAddr">
+      <input class="lineInput" placeholder="Phone" data-k="supPhone">
+      <input class="lineInput" placeholder="GSTIN" data-k="supGst">
+      <input class="lineInput" placeholder="Drug Licence No. (20B / 21B)" data-k="supDl">
+    </div>
+    <div class="box">
+      <h3>Deliver to</h3>
+      <input class="lineInput" value="Rohan Thomas Hospital — Pharmacy" data-k="toName">
+      <input class="lineInput" value="Karukutty, Angamaly, Kerala" data-k="toAddr">
+      <input class="lineInput" value="+91 87148 04743" data-k="toPhone">
+      <input class="lineInput" placeholder="Delivery date required" data-k="toDate">
+      <input class="lineInput" placeholder="Ordered by (pharmacist name)" data-k="toBy">
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:8mm">#</th>
+        <th>Product / brand &amp; strength</th>
+        <th class="qty">Packing</th>
+        <th class="qty">Qty</th>
+        <th class="num">Rate &#8377;</th>
+        <th class="num">Amount &#8377;</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <div class="totals">
+    <table>
+      <tr><td>Subtotal</td><td id="sub">0.00</td></tr>
+      <tr><td>GST % <input class="cell" id="gst" value="12" style="width:12mm; text-align:right; border-bottom:1px dotted var(--line)"></td><td id="tax">0.00</td></tr>
+      <tr class="grand"><td>Total</td><td id="grand">0.00</td></tr>
+    </table>
+  </div>
+
+  <div class="notes">
+    <b>Terms — please read:</b>
+    <ul>
+      <li>Every item must arrive with <b>batch number and expiry date</b> printed on the invoice and on the pack.</li>
+      <li>Invoice must show our Drug Licence No. and your GSTIN. No invoice, no acceptance.</li>
+      <li><b>Schedule H and H1</b> items: supply only against our licence, with the statutory register entry. H1 items are recorded in the H1 register at receipt.</li>
+      <li>Cold-chain items must arrive in a validated cold box with a temperature indicator.</li>
+      <li>Short supply, near-expiry (under 12 months) or damaged stock will be returned at your cost.</li>
+      <li>Payment terms: ______________________</li>
+    </ul>
+  </div>
+
+  <div class="sign">
+    <div>Prepared by (pharmacist)<br><span style="font-size:9.5px">Name, Reg. No., signature</span></div>
+    <div>Supplier acknowledgement<br><span style="font-size:9.5px">Name, signature, stamp, date</span></div>
+    <div>Received by<br><span style="font-size:9.5px">Name, signature, date</span></div>
+  </div>
+</div>
+
+<script>
+const ROWS = 10;
+const KEY = "rth-purchase-order-v1";
+const rowsEl = document.getElementById("rows");
+const statusEl = document.getElementById("status");
+
+function addRow(item = {}) {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td class="idx"></td>
+    <td><input class="cell" data-f="name" placeholder="e.g. Paracetamol 500mg tablet"></td>
+    <td><input class="cell" data-f="pack" placeholder="10x10"></td>
+    <td><input class="cell" data-f="qty" placeholder="0" inputmode="numeric"></td>
+    <td><input class="cell" data-f="rate" placeholder="0.00" inputmode="decimal" style="text-align:right"></td>
+    <td style="text-align:right" class="amt">0.00</td>`;
+  tr.querySelectorAll("input").forEach(inp => {
+    inp.value = item[inp.dataset.f] ?? "";
+    if (inp.dataset.f === "rate" || inp.dataset.f === "qty") inp.addEventListener("input", recalc);
+  });
+  rowsEl.appendChild(tr);
+  renumber();
+}
+
+function renumber() {
+  [...rowsEl.children].forEach((tr, i) => tr.querySelector(".idx").textContent = i + 1);
+}
+
+const num = v => { const n = parseFloat(String(v).replace(/[^0-9.\-]/g, "")); return isFinite(n) ? n : 0; };
+
+function recalc() {
+  let sub = 0;
+  [...rowsEl.children].forEach(tr => {
+    const qty = num(tr.querySelector('[data-f="qty"]').value);
+    const rate = num(tr.querySelector('[data-f="rate"]').value);
+    const amt = qty * rate;
+    tr.querySelector(".amt").textContent = amt ? amt.toFixed(2) : "0.00";
+    sub += amt;
+  });
+  const gstPct = num(document.getElementById("gst").value);
+  const tax = sub * gstPct / 100;
+  document.getElementById("sub").textContent = sub.toFixed(2);
+  document.getElementById("tax").textContent = tax.toFixed(2);
+  document.getElementById("grand").textContent = (sub + tax).toFixed(2);
+}
+
+// PO number: PO-YYMMDD-NNN, counter resets daily and lives in localStorage
+function makePoNo() {
+  const d = new Date();
+  const stamp = String(d.getFullYear()).slice(2)
+    + String(d.getMonth() + 1).padStart(2, "0")
+    + String(d.getDate()).padStart(2, "0");
+  const ck = "rth-po-counter-" + stamp;
+  const n = (parseInt(localStorage.getItem(ck) || "0", 10) + 1);
+  localStorage.setItem(ck, String(n));
+  return `PO-${stamp}-${String(n).padStart(3, "0")}`;
+}
+
+function today() {
+  const d = new Date();
+  return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+function collect() {
+  const items = [...rowsEl.children].map(tr => {
+    const o = {};
+    tr.querySelectorAll("input").forEach(i => o[i.dataset.f] = i.value);
+    return o;
+  }).filter(o => o.name || o.qty);
+  const fields = {};
+  document.querySelectorAll("[data-k]").forEach(i => fields[i.dataset.k] = i.value);
+  return { po: document.getElementById("poNo").textContent, date: document.getElementById("poDate").textContent, gst: document.getElementById("gst").value, items, fields };
+}
+
+function fill(d) {
+  document.getElementById("poNo").textContent = d.po || "PO-000000-000";
+  document.getElementById("poDate").textContent = d.date || today();
+  document.getElementById("gst").value = d.gst ?? "12";
+  Object.entries(d.fields || {}).forEach(([k, v]) => {
+    const el = document.querySelector(`[data-k="${k}"]`);
+    if (el) el.value = v;
+  });
+}
+
+function saveDraft(silent) {
+  localStorage.setItem(KEY, JSON.stringify(collect()));
+  if (!silent) flash("Draft saved in this browser.");
+}
+
+function flash(msg) {
+  statusEl.textContent = msg;
+  clearTimeout(window._t);
+  window._t = setTimeout(() => statusEl.textContent = "", 2500);
+}
+
+document.getElementById("addRow").addEventListener("click", () => { addRow(); recalc(); });
+document.getElementById("gst").addEventListener("input", recalc);
+
+document.getElementById("saveDraft").addEventListener("click", () => saveDraft(false));
+
+document.getElementById("clearDraft").addEventListener("click", () => {
+  if (!confirm("Clear the draft and start a new purchase order?")) return;
+  localStorage.removeItem(KEY);
+  rowsEl.innerHTML = "";
+  document.querySelectorAll("[data-k]").forEach(i => i.value = "");
+  document.getElementById("poNo").textContent = makePoNo();
+  document.getElementById("poDate").textContent = today();
+  for (let i = 0; i < ROWS; i++) addRow();
+  recalc();
+  flash("New purchase order started.");
+});
+
+document.addEventListener("input", (e) => {
+  if (e.target.matches("[data-k], .cell")) saveDraft(true);
+});
+
+// boot
+const saved = localStorage.getItem(KEY);
+if (saved) {
+  try {
+    const d = JSON.parse(saved);
+    fill(d);
+    (d.items && d.items.length ? d.items : Array.from({ length: ROWS }, () => ({}))).forEach(addRow);
+    recalc();
+    flash("Draft restored.");
+  } catch {
+    localStorage.removeItem(KEY);
+  }
+}
+if (!rowsEl.children.length) {
+  document.getElementById("poNo").textContent = makePoNo();
+  document.getElementById("poDate").textContent = today();
+  for (let i = 0; i < ROWS; i++) addRow();
+  recalc();
+}
+</script>
+</body>
+</html>

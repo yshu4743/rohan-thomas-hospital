@@ -129,3 +129,19 @@ access under the IT Act (s.43/66), even if you own the domain name. If
 `leogroup.in` is run by a vendor, the route is their partner-onboarding form
 plus a written email — not their endpoints. Fixing this page and your Google
 profile is legal, permanent, and cannot be taken away from you.
+
+## 6. Files in this folder
+
+| File | What it is |
+|---|---|
+| `index.html` | The hospital website. Edit the `SITE` block to change anything. |
+| `prescription.html` | Printable A5 prescription pad. Shows a red DRAFT banner until a real doctor and registration number are set. |
+| `purchase-order.html` | Printable A4 purchase order for wholesale dealers. Auto PO number, GST totals, draft saved in the browser. |
+| `dealers.md` | Dealer verification checklist and the weekly ordering routine. |
+| `duplicate-drug-licence.md` | Application letter and document list for a lost drug licence. |
+| `outreach-script.md` | Daily refill-calling script for bringing customers back. |
+| `bot/` | WhatsApp front-desk bot and stock-order API from an earlier session. Needs Meta credentials to run. |
+| `deploy.sh` | Commit and push; the site redeploys in about a minute. |
+
+All pages are static: nothing is uploaded, no API keys, no server. The purchase
+order and prescription pad live entirely in the browser.
