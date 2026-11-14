@@ -10,12 +10,15 @@ Open `index.html`, scroll to the bottom, and edit the `SITE` block:
 const SITE = {
   name:      "Rohan Thomas Hospital",
   tagline:   "Hospital & Pharmacy",
-  phone:     "917994804743",
+  phone:     "917994804743",          // hospital / general enquiries
   phoneText: "+91 79948 04743",
-  address:   "Your street, town, PIN",
+  medPhone:     "918714804743",       // medicine orders, pharmacy, WhatsApp
+  medPhoneText: "+91 87148 04743",
+  address:   "Karukutty, Angamaly, Kerala",
   mapsQuery: "Karukutty, Angamaly, Kerala",
   govtAided: false,
-  govtLabel: "Government Aided"
+  govtLabel: "Government Aided",
+  doctors: []
 };
 ```
 
